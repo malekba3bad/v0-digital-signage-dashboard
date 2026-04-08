@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { dashboardConfig } from '@/data/config';
 
-// ثوابت على مستوى الوحدة — لا تُعاد إنشاؤها في كل تحديث
 const DAY_NAMES = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
 const MONTH_NAMES = [
   'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
@@ -51,14 +50,35 @@ export function ClockDate() {
   return (
     <div className="flex flex-col items-start gap-0.5" dir="ltr">
       {/* الساعة */}
-      <div className="text-5xl font-black text-white font-mono leading-none tabular-nums drop-shadow-lg">
+      <div
+        className="font-black font-mono leading-none tabular-nums"
+        style={{
+          fontSize: '2.8rem',
+          background: 'linear-gradient(135deg, #ffffff, #c7d2fe)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          textShadow: 'none',
+          filter: 'drop-shadow(0 0 8px rgba(99,102,241,0.4))',
+        }}
+      >
         {time}
       </div>
       {/* التاريخ الميلادي */}
-      <div className="text-lg text-slate-300 font-medium">{gregorianDate}</div>
+      <div className="text-sm text-slate-300 font-medium">{gregorianDate}</div>
       {/* التاريخ الهجري */}
       {hijriDate && (
-        <div className="text-sm text-yellow-400/80 font-medium">{hijriDate}</div>
+        <div
+          className="text-xs font-semibold"
+          style={{
+            background: 'linear-gradient(90deg, #f59e0b, #fbbf24)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+        >
+          {hijriDate}
+        </div>
       )}
     </div>
   );

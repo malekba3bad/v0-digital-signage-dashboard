@@ -30,19 +30,43 @@ function calculateTimeRemaining(): TimeRemaining {
 }
 
 const TimeBlock = ({ value, label }: { value: number; label: string }) => (
-  <div className="flex flex-col items-center">
-    <div className="bg-yellow-500 text-slate-900 rounded-xl px-4 py-2 min-w-[4.5rem] shadow-lg shadow-yellow-500/30 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent" />
-      <div className="text-4xl font-black tabular-nums relative z-10">
+  <div className="flex flex-col items-center gap-1">
+    <div
+      className="relative overflow-hidden rounded-xl min-w-[3.8rem] text-center"
+      style={{
+        background: 'linear-gradient(135deg, rgba(99,102,241,0.7) 0%, rgba(139,92,246,0.7) 100%)',
+        border: '1px solid rgba(139,92,246,0.4)',
+        boxShadow: '0 0 16px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
+        padding: '6px 10px',
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
+      <div className="text-3xl font-black tabular-nums text-white relative z-10 leading-none">
         {String(value).padStart(2, '0')}
       </div>
     </div>
-    <div className="text-yellow-400/90 text-xs font-semibold mt-1.5 tracking-wider">{label}</div>
+    <div
+      className="text-[10px] font-bold tracking-wider"
+      style={{ color: '#a78bfa' }}
+    >
+      {label}
+    </div>
   </div>
 );
 
 const Separator = () => (
-  <div className="text-yellow-500 text-4xl font-black mb-5 animate-pulse select-none">:</div>
+  <div
+    className="text-3xl font-black mb-4 select-none"
+    style={{
+      background: 'linear-gradient(180deg, #6366f1, #8b5cf6)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text',
+      animation: 'pulse 1.2s ease-in-out infinite',
+    }}
+  >
+    :
+  </div>
 );
 
 export function Countdown() {
@@ -58,7 +82,7 @@ export function Countdown() {
   if (time.isCompleted) {
     return (
       <div className="flex flex-col items-center gap-1">
-        <div className="text-green-400 text-2xl font-bold animate-pulse">
+        <div className="text-green-400 text-xl font-bold animate-pulse">
           {dashboardConfig.countdown.completedLabel}
         </div>
       </div>
@@ -67,10 +91,13 @@ export function Countdown() {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className="text-lg font-semibold text-yellow-300/80 tracking-wide">
+      <div
+        className="text-sm font-bold tracking-wide"
+        style={{ color: '#c7d2fe' }}
+      >
         {dashboardConfig.countdown.label}
       </div>
-      <div className="flex gap-2 items-end">
+      <div className="flex gap-1.5 items-end">
         <TimeBlock value={time.days} label="أيام" />
         <Separator />
         <TimeBlock value={time.hours} label="ساعات" />
