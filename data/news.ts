@@ -28,7 +28,7 @@ export const newsItems: NewsItem[] = [
     type: 'youtube',
     id: 'news-2',
     titleAr: 'شرح المنهج الجديد للسنة الدراسية',
-    youtubeVideoId: 'dQw4w9WgXcQ',
+    youtubeVideoId: 'pUu5sb73igA',
     isUrgent: false,
   },
   {
