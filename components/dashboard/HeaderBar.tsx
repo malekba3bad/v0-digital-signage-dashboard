@@ -27,7 +27,6 @@ export function HeaderBar() {
   return (
     <header
       className="relative bg-gradient-to-b from-slate-800 to-slate-900 border-b border-yellow-500/25 h-[15%] flex-shrink-0 overflow-hidden"
-      /* نضع dir=ltr هنا فقط لنتحكم بالترتيب يدوياً داخل كل عمود */
       dir="ltr"
     >
       {/* Top glow line */}
@@ -50,7 +49,6 @@ export function HeaderBar() {
 
         {/* العمود الأيمن (فيزيائياً) = شعار + عنوان الوزارة */}
         <div className="flex items-center justify-end gap-4">
-          {/* النص محاذاة يمين */}
           <div dir="rtl" className="text-right">
             <div className="text-[1.6rem] font-black text-white leading-tight">
               مكتب وزارة التربية والتعليم
