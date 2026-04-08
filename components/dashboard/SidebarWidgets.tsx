@@ -10,7 +10,7 @@ interface SidebarWidgetsProps {
 
 export function SidebarWidgets({ events, stats }: SidebarWidgetsProps) {
   return (
-    <aside className="w-[35%] flex flex-col gap-6 overflow-hidden">
+    <aside className="flex flex-col gap-5 overflow-hidden h-full">
       {/* Events Section */}
       <div className="flex-1 overflow-hidden">
         <EventsList events={events} />

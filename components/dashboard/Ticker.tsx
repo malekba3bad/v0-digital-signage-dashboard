@@ -1,32 +1,25 @@
-import { CSSProperties } from 'react';
-
-const urgentNotices = [
-  'تذكير هام: آخر موعد للتسجيل في الاختبارات النهائية هو الخميس القادم',
-  'إعلان: سيتم إغلاق الدوام في جميع المدارس يوم الجمعة للصيانة الدورية',
-  'تنبيه: يرجى حضور الاجتماع الإداري يوم الأربعاء الساعة الثالثة عصراً',
-  'إشعار: تم تأجيل اختبارات الفصل الثاني إلى الأسبوع القادم',
-  'تعميم: جميع الطلاب والطالبات مطالبين باستلام شهاداتهم من المدرسة',
-];
+import { tickerNotices } from '@/data/ticker';
 
 export function Ticker() {
-  const scrollText = urgentNotices.join(' • ');
+  const scrollText = tickerNotices.join('   ✦   ');
 
   return (
-    <footer className="bg-red-600 text-white h-[8%] flex items-center overflow-hidden flex-shrink-0 border-t-2 border-red-700">
+    <footer className="bg-gradient-to-r from-red-800 via-red-600 to-red-800 text-white h-[8%] flex items-center overflow-hidden flex-shrink-0 border-t-2 border-red-900/80 relative">
+      {/* Label */}
+      <div className="flex-shrink-0 bg-red-900 h-full flex items-center px-5 gap-3 border-l-2 border-red-950 z-10">
+        <span className="text-2xl">📢</span>
+        <span className="font-black text-xl tracking-widest whitespace-nowrap">عـاجل</span>
+      </div>
+
+      {/* Ticker scroll */}
       <style>{`
         @keyframes scroll-rtl {
-          0% {
-            transform: translateX(100%);
-          }
-          100% {
-            transform: translateX(-100%);
-          }
+          0%   { transform: translateX(100vw); }
+          100% { transform: translateX(-100%); }
         }
-        
         .ticker-content {
-          animation: scroll-rtl 60s linear infinite;
+          animation: scroll-rtl 70s linear infinite;
           white-space: nowrap;
-          padding-right: 100%;
         }
       `}</style>
 

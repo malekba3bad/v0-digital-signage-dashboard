@@ -1,19 +1,31 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Users, BookOpen, CheckCircle } from 'lucide-react';
+import { Users, GraduationCap, School, CheckCircle } from 'lucide-react';
 import { Stat } from '@/data/stats';
-import { Card } from '@/components/ui/card';
 
 interface StatsCardsProps {
   stats: Stat[];
 }
 
 const iconMap = {
-  Users: Users,
-  BookOpen: BookOpen,
-  CheckCircle: CheckCircle,
+  Users,
+  GraduationCap,
+  School,
+  CheckCircle,
 };
+
+const colorMap: Record<string, { bg: string; border: string; icon: string; glow: string }> = {
+  blue:    { bg: 'from-blue-500/10',    border: 'border-blue-500/30',    icon: 'text-blue-400',    glow: 'shadow-blue-500/20' },
+  emerald: { bg: 'from-emerald-500/10', border: 'border-emerald-500/30', icon: 'text-emerald-400', glow: 'shadow-emerald-500/20' },
+  purple:  { bg: 'from-purple-500/10',  border: 'border-purple-500/30',  icon: 'text-purple-400',  glow: 'shadow-purple-500/20' },
+  amber:   { bg: 'from-amber-500/10',   border: 'border-amber-500/30',   icon: 'text-amber-400',   glow: 'shadow-amber-500/20' },
+};
+
+// Easing function for smoother count-up
+function easeOutQuart(t: number): number {
+  return 1 - Math.pow(1 - t, 4);
+}
 
 export function StatsCards({ stats }: StatsCardsProps) {
   const [displayValues, setDisplayValues] = useState<Record<string, number>>({});
@@ -22,65 +34,74 @@ export function StatsCards({ stats }: StatsCardsProps) {
   useEffect(() => {
     if (hasAnimated) return;
 
-    // Initialize display values at 0
     const initial: Record<string, number> = {};
-    stats.forEach((stat) => {
-      initial[stat.id] = 0;
-    });
+    stats.forEach((s) => { initial[s.id] = 0; });
     setDisplayValues(initial);
 
-    // Animate count-up
-    const animationDuration = 2000; // 2 seconds
-    const frameCount = 60;
-    const frameInterval = animationDuration / frameCount;
-    let frame = 0;
+    const duration = 2500;
+    const startTime = performance.now();
 
-    const animateInterval = setInterval(() => {
-      frame++;
-      const progress = frame / frameCount;
+    const animate = (now: number) => {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const easedT = easeOutQuart(t);
 
       const newValues: Record<string, number> = {};
-      stats.forEach((stat) => {
-        newValues[stat.id] = Math.floor(stat.value * progress);
+      stats.forEach((s) => {
+        newValues[s.id] = Math.floor(s.value * easedT);
       });
       setDisplayValues(newValues);
 
-      if (frame >= frameCount) {
-        clearInterval(animateInterval);
+      if (t < 1) {
+        requestAnimationFrame(animate);
+      } else {
         const finalValues: Record<string, number> = {};
-        stats.forEach((stat) => {
-          finalValues[stat.id] = stat.value;
-        });
+        stats.forEach((s) => { finalValues[s.id] = s.value; });
         setDisplayValues(finalValues);
         setHasAnimated(true);
       }
-    }, frameInterval);
+    };
 
-    return () => clearInterval(animateInterval);
+    const rafId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafId);
   }, [stats, hasAnimated]);
 
   return (
     <div className="flex flex-col h-full">
-      <div className="border-t border-yellow-500/50 pt-4 mb-4" />
-      <h3 className="text-2xl font-bold text-white mb-4 text-end">إحصائيات الإنجاز</h3>
-      <div className="grid grid-cols-1 gap-3">
+      {/* Section header */}
+      <div className="flex items-center justify-end gap-3 mb-3">
+        <h3 className="text-xl font-black text-white tracking-wide">إحصائيات الإنجاز</h3>
+        <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
+          <CheckCircle className="w-4 h-4 text-blue-400" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-2.5">
         {stats.map((stat) => {
           const IconComponent = iconMap[stat.icon as keyof typeof iconMap] || Users;
           const displayValue = displayValues[stat.id] ?? 0;
+          const colors = colorMap[stat.color] ?? colorMap.blue;
 
           return (
-            <Card
+            <div
               key={stat.id}
-              className="bg-gradient-to-l from-blue-500/10 to-transparent border-blue-500/50 p-4 hover:border-blue-400 transition-colors"
+              className={`rounded-xl border bg-gradient-to-br ${colors.bg} to-slate-800/60 ${colors.border} p-3.5 shadow-sm ${colors.glow}`}
             >
-              <div className="flex items-center gap-4">
-                <IconComponent className="w-8 h-8 text-blue-400 flex-shrink-0" />
-                <div className="flex-1 text-end">
-                  <div className="text-2xl font-bold text-white">{displayValue.toLocaleString('ar-SA')}</div>
-                  <div className="text-sm text-gray-300">{stat.titleAr}</div>
+              <div className="flex flex-col items-end gap-1.5">
+                <div className={`w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center`}>
+                  <IconComponent className={`w-4 h-4 ${colors.icon}`} />
+                </div>
+                <div className="text-2xl font-black text-white tabular-nums leading-none">
+                  {displayValue.toLocaleString('ar-SA')}
+                </div>
+                <div className="text-xs text-slate-300 font-semibold text-end leading-tight">
+                  {stat.titleAr}
+                </div>
+                <div className={`text-xs ${colors.icon} opacity-70`}>
+                  {stat.unit}
                 </div>
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>

@@ -49,7 +49,7 @@ export const newsItems: NewsItem[] = [
     type: 'youtube',
     id: 'news-5',
     titleAr: 'إرشادات الاختبارات النهائية',
-    youtubeVideoId: 'pUu5sb73igA?si=mICK3HB5xBhz1QrE',
+    youtubeVideoId: 'pUu5sb73igA',
     isUrgent: true,
   },
 ];
