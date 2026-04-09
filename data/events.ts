@@ -10,14 +10,14 @@ export interface Event {
 export const events: Event[] = [
   {
     id: 'event-1',
-    titleAr: 'مسابقة الروبوتيكس الإقليمية',
+    titleAr: 'جائزة حضرموت للمعلم المتميز',
     date: '2026-06-15',
     dateAr: '١٥ يونيو ٢٠٢٦',
-    locationAr: 'مقر الوزارة - المكلا',
+    locationAr: 'المكلا',
   },
   {
     id: 'event-2',
-    titleAr: 'ورشة تطوير المهارات الرقمية',
+    titleAr: 'دورة تطوير المحتوى الرقمي للاعلام التربوي',
     date: '2026-06-20',
     dateAr: '٢٠ يونيو ٢٠٢٦',
     locationAr: 'مركز التدريب التربوي',

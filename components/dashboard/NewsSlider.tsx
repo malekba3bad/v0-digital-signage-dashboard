@@ -325,7 +325,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
 
         {/* عنوان الفيديو */}
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 to-transparent p-8 z-10">
-          <h2 className="text-5xl font-black text-white text-start drop-shadow-xl">
+          <h2 className="text-4xl leading-11 font-black text-white text-start drop-shadow-xl">
             {currentItem.titleAr}
           </h2>
         </div>
