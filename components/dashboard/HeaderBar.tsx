@@ -1,31 +1,18 @@
 import { Countdown } from './Countdown';
 import { ClockDate } from './ClockDate';
+import Image from 'next/image';
+
 
 /** شعار وزارة التربية والتعليم — SVG مُضمّن */
 function MinistryLogo() {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 80 80"
-      className="w-11 h-11 flex-shrink-0 drop-shadow-lg"
-      aria-label="شعار وزارة التربية والتعليم"
-    >
-      <defs>
-        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f59e0b" />
-          <stop offset="100%" stopColor="#fbbf24" />
-        </linearGradient>
-      </defs>
-      <path d="M40 4 L72 18 L72 46 C72 62 57 74 40 78 C23 74 8 62 8 46 L8 18 Z"
-        fill="none" stroke="url(#shieldGrad)" strokeWidth="2.5" />
-      <path d="M40 12 L64 23 L64 45 C64 58 53 68 40 72 C27 68 16 58 16 45 L16 23 Z"
-        fill="rgba(245,158,11,0.1)" stroke="#f59e0b" strokeWidth="1.5" strokeOpacity="0.5" />
-      <rect x="28" y="28" width="10" height="14" rx="1.5" fill="none" stroke="#fbbf24" strokeWidth="1.8" />
-      <rect x="42" y="28" width="10" height="14" rx="1.5" fill="none" stroke="#fbbf24" strokeWidth="1.8" />
-      <line x1="40" y1="28" x2="40" y2="42" stroke="#fbbf24" strokeWidth="1" />
-      <circle cx="40" cy="22" r="3" fill="#f59e0b" />
-      <line x1="30" y1="48" x2="50" y2="48" stroke="#f59e0b" strokeWidth="1.5" strokeOpacity="0.6" />
-    </svg>
+    <Image
+      src="/logo.png"
+      alt="شعار وزارة التربية والتعليم"
+      width={50}
+      height={50}
+      className="flex-shrink-0 drop-shadow-lg"
+    />
   );
 }
 
