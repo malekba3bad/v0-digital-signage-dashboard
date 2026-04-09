@@ -9,50 +9,52 @@ export function Ticker() {
       className="flex items-center overflow-hidden flex-shrink-0 relative"
       style={{
         height: '7%',
-        background: 'linear-gradient(90deg, #312e81 0%, #4c1d95 20%, #4338ca 50%, #4c1d95 80%, #312e81 100%)',
-        borderTop: '1px solid rgba(139,92,246,0.4)',
+        background: '#8B6914', // Dark Gold
+        borderTop: '2px solid #C8A84B',
       }}
     >
       {/* Shimmer line */}
       <div
-        className="absolute top-0 inset-x-0 pointer-events-none"
+        className="absolute top-0 inset-x-0 pointer-events-none z-10"
         style={{
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.6), rgba(245,158,11,0.5), rgba(167,139,250,0.6), transparent)',
+          height: '2px',
+          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent)',
+          animation: 'shimmer-slide 3s infinite linear',
         }}
       />
 
       {/* Label */}
       <div
-        className="flex-shrink-0 h-full flex items-center gap-2.5 z-10"
+        className="flex-shrink-0 h-full flex items-center gap-2.5 z-20"
         style={{
           padding: '0 18px',
-          background: 'rgba(0,0,0,0.3)',
-          borderLeft: '1px solid rgba(139,92,246,0.3)',
+          background: '#fe2e28', // Red from Yemen flag
+          borderLeft: '2px solid #C8A84B',
+          boxShadow: '4px 0 10px rgba(0,0,0,0.2)',
         }}
       >
-        <Megaphone className="w-5 h-5 text-amber-300 animate-pulse" />
-        <span className="font-black text-lg tracking-widest whitespace-nowrap text-white">
+        <Megaphone className="w-6 h-6 text-white animate-pulse" />
+        <span className="font-black text-xl tracking-widest whitespace-nowrap text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
           إعـلان
         </span>
       </div>
 
       {/* Ticker scroll */}
       <style>{`
-        @keyframes scroll-rtl {
-          0%   { transform: translateX(100vw); }
-          100% { transform: translateX(-100%); }
+        @keyframes scroll-ltr {
+          0%   { transform: translateX(-100vw); }
+          100% { transform: translateX(100%); }
         }
         .ticker-content {
-          animation: scroll-rtl 70s linear infinite;
+          animation: scroll-ltr 70s linear infinite;
           white-space: nowrap;
         }
       `}</style>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden z-10">
         <div
           className="ticker-content font-bold tracking-wider"
-          style={{ fontSize: '1.1rem', color: '#e2e8f0' }}
+          style={{ fontSize: '1.25rem', color: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
         >
           {scrollText}
         </div>

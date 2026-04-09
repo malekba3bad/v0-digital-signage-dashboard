@@ -10,38 +10,22 @@ interface StatsCardsProps {
 
 const iconMap = { Users, GraduationCap, School, CheckCircle };
 
-const colorMap: Record<string, { from: string; to: string; border: string; icon: string; iconBg: string; glow: string }> = {
+const colorMap: Record<string, { icon: string; iconBg: string }> = {
   blue: {
-    from: 'rgba(59,130,246,0.15)',
-    to: 'rgba(59,130,246,0.03)',
-    border: 'rgba(59,130,246,0.25)',
-    icon: '#60a5fa',
-    iconBg: 'rgba(59,130,246,0.12)',
-    glow: '0 0 15px rgba(59,130,246,0.1)',
+    icon: '#1976D2',
+    iconBg: '#eff6ff',
   },
   emerald: {
-    from: 'rgba(16,185,129,0.15)',
-    to: 'rgba(16,185,129,0.03)',
-    border: 'rgba(16,185,129,0.25)',
-    icon: '#34d399',
-    iconBg: 'rgba(16,185,129,0.12)',
-    glow: '0 0 15px rgba(16,185,129,0.1)',
+    icon: '#2D6B2D',
+    iconBg: '#f0fdf4',
   },
   purple: {
-    from: 'rgba(139,92,246,0.15)',
-    to: 'rgba(139,92,246,0.03)',
-    border: 'rgba(139,92,246,0.25)',
-    icon: '#a78bfa',
-    iconBg: 'rgba(139,92,246,0.12)',
-    glow: '0 0 15px rgba(139,92,246,0.1)',
+    icon: '#8B6914',
+    iconBg: '#fefce8',
   },
   amber: {
-    from: 'rgba(245,158,11,0.15)',
-    to: 'rgba(245,158,11,0.03)',
-    border: 'rgba(245,158,11,0.25)',
-    icon: '#fbbf24',
-    iconBg: 'rgba(245,158,11,0.12)',
-    glow: '0 0 15px rgba(245,158,11,0.1)',
+    icon: '#C8A84B',
+    iconBg: '#fefce8',
   },
 };
 
@@ -90,16 +74,15 @@ export function StatsCards({ stats }: StatsCardsProps) {
       {stats.map((stat, i) => {
         const IconComponent = iconMap[stat.icon as keyof typeof iconMap] || Users;
         const displayValue = displayValues[stat.id] ?? 0;
-        const colors = colorMap[stat.color] ?? colorMap.blue;
+        const colors = colorMap[stat.color] ?? colorMap.amber;
 
         return (
           <div
             key={stat.id}
-            className="rounded-xl transition-all duration-300 flex flex-col justify-between"
+            className="rounded-xl transition-all duration-300 flex flex-col justify-between bg-white"
             style={{
-              background: `linear-gradient(135deg, ${colors.from} 0%, ${colors.to} 100%)`,
-              border: `1px solid ${colors.border}`,
-              boxShadow: colors.glow,
+              border: '1px solid rgba(200,168,75,0.4)',
+              boxShadow: '0 2px 10px rgba(200,168,75,0.08)',
               padding: '10px 12px',
               animationDelay: `${i * 100}ms`,
               minHeight: '80px',
@@ -111,7 +94,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
                 className="font-black tabular-nums leading-none"
                 style={{
                   fontSize: '1.4rem',
-                  color: '#ffffff',
+                  color: '#2D1A00',
                 }}
               >
                 {displayValue.toLocaleString('ar-SA')}
@@ -125,16 +108,16 @@ export function StatsCards({ stats }: StatsCardsProps) {
             </div>
 
             {/* Footer: Title + Unit */}
-            <div className="text-end">
+            <div className="text-start">
               <div
                 className="text-xs font-bold leading-tight"
-                style={{ color: '#cbd5e1' }}
+                style={{ color: '#6B5B3E' }}
               >
                 {stat.titleAr}
               </div>
               <div
                 className="text-[10px] font-semibold mt-0.5"
-                style={{ color: colors.icon, opacity: 0.8 }}
+                style={{ color: colors.icon, opacity: 0.9 }}
               >
                 {stat.unit}
               </div>

@@ -34,20 +34,20 @@ const TimeBlock = ({ value, label }: { value: number; label: string }) => (
     <div
       className="relative overflow-hidden rounded-xl min-w-[3.8rem] text-center"
       style={{
-        background: 'linear-gradient(135deg, rgba(99,102,241,0.7) 0%, rgba(139,92,246,0.7) 100%)',
-        border: '1px solid rgba(139,92,246,0.4)',
-        boxShadow: '0 0 16px rgba(99,102,241,0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
+        background: '#FFFFFF',
+        border: '1px solid rgba(200,168,75,0.4)',
+        boxShadow: '0 2px 10px rgba(200,168,75,0.1)',
         padding: '6px 10px',
       }}
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white/15 to-transparent pointer-events-none" />
-      <div className="text-3xl font-black tabular-nums text-white relative z-10 leading-none">
+      <div className="absolute inset-0 bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+      <div className="text-3xl font-black tabular-nums relative z-10 leading-none text-[#2D1A00]">
         {String(value).padStart(2, '0')}
       </div>
     </div>
     <div
       className="text-[10px] font-bold tracking-wider"
-      style={{ color: '#a78bfa' }}
+      style={{ color: '#8B6914' }}
     >
       {label}
     </div>
@@ -58,7 +58,7 @@ const Separator = () => (
   <div
     className="text-3xl font-black mb-4 select-none"
     style={{
-      background: 'linear-gradient(180deg, #6366f1, #8b5cf6)',
+      background: 'linear-gradient(180deg, #C8A84B, #8B6914)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
       backgroundClip: 'text',
@@ -82,7 +82,7 @@ export function Countdown() {
   if (time.isCompleted) {
     return (
       <div className="flex flex-col items-center gap-1">
-        <div className="text-green-400 text-xl font-bold animate-pulse">
+        <div className="text-[#2D6B2D] text-xl font-bold animate-pulse">
           {dashboardConfig.countdown.completedLabel}
         </div>
       </div>
@@ -93,7 +93,7 @@ export function Countdown() {
     <div className="flex flex-col items-center gap-2">
       <div
         className="text-sm font-bold tracking-wide"
-        style={{ color: '#c7d2fe' }}
+        style={{ color: '#fe2e28' }}
       >
         {dashboardConfig.countdown.label}
       </div>

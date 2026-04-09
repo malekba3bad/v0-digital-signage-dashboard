@@ -287,7 +287,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
           <div className="absolute inset-0 flex items-end p-8">
-            <h2 className="text-5xl font-black text-white text-end max-w-4xl leading-tight drop-shadow-xl">
+            <h2 className="text-5xl font-black text-white text-start max-w-4xl leading-tight drop-shadow-xl">
               {currentItem.titleAr}
             </h2>
           </div>
@@ -305,10 +305,9 @@ export function NewsSlider({ items }: NewsSliderProps) {
           className="absolute inset-0 w-full h-full"
         />
 
-        {/* شريط تقدّم الفيديو (أزرق) */}
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-white/10 z-30">
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-white/20 z-30">
           <div
-            className="h-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.8)] transition-all duration-1000 ease-linear"
+            className="h-full bg-[#C8A84B] shadow-[0_0_12px_rgba(200,168,75,0.8)] transition-all duration-1000 ease-linear"
             style={{ width: `${videoProgress}%` }}
           />
         </div>
@@ -326,7 +325,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
 
         {/* عنوان الفيديو */}
         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 to-transparent p-8 z-10">
-          <h2 className="text-5xl font-black text-white text-end drop-shadow-xl">
+          <h2 className="text-5xl font-black text-white text-start drop-shadow-xl">
             {currentItem.titleAr}
           </h2>
         </div>
@@ -336,7 +335,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
 
   // ─── الواجهة الخارجية ─────────────────────────────────────────────────────
   return (
-    <div className="relative w-full h-full overflow-hidden rounded-2xl bg-black shadow-2xl">
+    <div className="relative w-full h-full overflow-hidden rounded-2xl bg-[#FFFFFF] border border-[rgba(200,168,75,0.4)] shadow-[0_4px_24px_rgba(200,168,75,0.15)]">
 
       {/* المحتوى مع تأثير تلاشي */}
       <div
@@ -348,9 +347,9 @@ export function NewsSlider({ items }: NewsSliderProps) {
 
       {/* شريط تقدّم الصورة (أصفر) */}
       {currentItem.type === 'image' && (
-        <div className="absolute top-0 inset-x-0 h-1.5 bg-white/10 z-30">
+        <div className="absolute top-0 inset-x-0 h-1.5 bg-white/20 z-30">
           <div
-            className="h-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.8)]"
+            className="h-full bg-[#C8A84B] shadow-[0_0_12px_rgba(200,168,75,0.8)]"
             style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}
           />
         </div>
@@ -363,8 +362,8 @@ export function NewsSlider({ items }: NewsSliderProps) {
             key={index}
             className={`h-2 rounded-full transition-all duration-300 ${
               index === currentIndex
-                ? 'bg-yellow-400 w-8 shadow-[0_0_6px_rgba(250,204,21,0.8)]'
-                : 'bg-white/30 w-2'
+                ? 'bg-[#C8A84B] w-8 shadow-[0_0_8px_rgba(200,168,75,0.8)]'
+                : 'bg-white/50 w-2 drop-shadow-sm'
             }`}
           />
         ))}

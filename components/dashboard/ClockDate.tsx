@@ -48,33 +48,26 @@ export function ClockDate() {
   }, []);
 
   return (
-    <div className="flex flex-col items-start gap-0.5" dir="ltr">
+    <div className="flex flex-col items-start gap-0.5">
       {/* الساعة */}
       <div
         className="font-black font-mono leading-none tabular-nums"
         style={{
           fontSize: '2.8rem',
-          background: 'linear-gradient(135deg, #ffffff, #c7d2fe)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
-          textShadow: 'none',
-          filter: 'drop-shadow(0 0 8px rgba(99,102,241,0.4))',
+          color: '#2D1A00',
+          textShadow: '0 2px 4px rgba(200,168,75,0.3)',
         }}
       >
         {time}
       </div>
       {/* التاريخ الميلادي */}
-      <div className="text-sm text-slate-300 font-medium">{gregorianDate}</div>
+      <div className="text-sm font-bold" style={{ color: '#8B6914' }}>{gregorianDate}</div>
       {/* التاريخ الهجري */}
       {hijriDate && (
         <div
-          className="text-xs font-semibold"
+          className="text-xs font-black"
           style={{
-            background: 'linear-gradient(90deg, #f59e0b, #fbbf24)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            color: '#fe2e28',
           }}
         >
           {hijriDate}

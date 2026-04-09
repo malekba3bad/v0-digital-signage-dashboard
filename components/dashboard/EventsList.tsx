@@ -17,27 +17,27 @@ function DaysBadge({ days }: { days: number }) {
   if (days < 0)
     return (
       <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
-        style={{ background: 'rgba(100,116,139,0.25)', color: '#94a3b8' }}>
+        style={{ background: '#f1f5f9', color: '#64748b', border: '1px solid #cbd5e1' }}>
         انتهت
       </span>
     );
   if (days === 0)
     return (
       <span className="text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse"
-        style={{ background: 'rgba(16,185,129,0.2)', color: '#34d399', border: '1px solid rgba(16,185,129,0.35)' }}>
+        style={{ background: '#dcfce7', color: '#166534', border: '1px solid #86efac' }}>
         اليوم!
       </span>
     );
   if (days <= 7)
     return (
       <span className="text-[10px] px-2 py-0.5 rounded-full font-bold"
-        style={{ background: 'rgba(249,115,22,0.18)', color: '#fb923c', border: '1px solid rgba(249,115,22,0.3)' }}>
+        style={{ background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5' }}>
         {days} أيام
       </span>
     );
   return (
     <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
-      style={{ background: 'rgba(245,158,11,0.12)', color: '#fbbf24', border: '1px solid rgba(245,158,11,0.22)' }}>
+      style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d' }}>
       {days} يوم
     </span>
   );
@@ -54,7 +54,7 @@ export function EventsList({ events }: EventsListProps) {
   });
 
   return (
-    <div className="flex flex-col h-full gap-2 overflow-y-auto">
+    <div className="flex flex-col h-full gap-2 overflow-y-auto pr-1">
       {sorted.map((event) => {
         const days = getDaysRemaining(event.date);
         const isPast = days < 0;
@@ -67,13 +67,14 @@ export function EventsList({ events }: EventsListProps) {
               padding: '8px 10px',
               ...(isPast
                 ? {
-                    background: 'rgba(255,255,255,0.02)',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    opacity: 0.5,
+                    background: 'rgba(255,255,255,0.6)',
+                    border: '1px solid rgba(200,168,75,0.2)',
+                    opacity: 0.6,
                   }
                 : {
-                    background: 'linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(251,191,36,0.02) 100%)',
-                    border: '1px solid rgba(245,158,11,0.18)',
+                    background: 'rgba(255,255,255,0.95)',
+                    border: '1px solid rgba(200,168,75,0.4)',
+                    boxShadow: '0 2px 8px rgba(200,168,75,0.08)',
                   }),
             }}
           >
@@ -84,30 +85,30 @@ export function EventsList({ events }: EventsListProps) {
                 style={{
                   width: '36px',
                   height: '40px',
-                  background: 'linear-gradient(135deg, rgba(245,158,11,0.45), rgba(251,191,36,0.3))',
-                  border: '1px solid rgba(245,158,11,0.28)',
+                  background: 'linear-gradient(135deg, #FDF8F0, #FFFFFF)',
+                  border: '1px solid #C8A84B',
                 }}
               >
-                <div className="text-base font-black text-amber-300 leading-none">
+                <div className="text-base font-black space-y-0 text-[#fe2e28] leading-none">
                   {new Date(event.date + 'T00:00:00').getDate()}
                 </div>
-                <div className="text-[9px] text-amber-400/80 font-bold leading-tight">
+                <div className="text-[9px] text-[#8B6914] font-bold leading-tight">
                   {new Date(event.date + 'T00:00:00').toLocaleDateString('ar', { month: 'short' })}
                 </div>
               </div>
             )}
 
             {/* Event info */}
-            <div className="flex-1 text-end min-w-0">
-              <div className="flex items-center justify-end gap-1.5 mb-0.5">
+            <div className="flex-1 text-start min-w-0">
+              <div className="flex items-center justify-start gap-1.5 mb-0.5">
                 <DaysBadge days={days} />
-                <h4 className="text-sm font-bold text-white leading-snug truncate">{event.titleAr}</h4>
+                <h4 className="text-sm font-bold leading-snug truncate" style={{ color: '#2D1A00' }}>{event.titleAr}</h4>
               </div>
-              <div className="flex items-center gap-1 text-slate-400 text-[11px] justify-end">
+              <div className="flex items-center gap-1 text-[11px] justify-start" style={{ color: '#6B5B3E' }}>
                 <span className="truncate">{event.locationAr}</span>
-                <MapPin className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#f59e0b88' }} />
+                <MapPin className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#C8A84B' }} />
                 <span className="flex-shrink-0">{event.dateAr}</span>
-                <Clock className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#f59e0b88' }} />
+                <Clock className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#C8A84B' }} />
               </div>
             </div>
           </div>

@@ -47,19 +47,19 @@ export default function Dashboard() {
     <div
       className="w-screen h-screen flex flex-col overflow-hidden transition-opacity duration-[2000ms] relative"
       style={{
-        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%)',
+        background: '#FDF8F0',
         opacity: isDimmed ? dashboardConfig.nightDimming.opacity : 1,
       }}
       dir="rtl"
     >
-      {/* Decorative background orbs */}
+      {/* Decorative warm golden orbs */}
       <div
         className="absolute pointer-events-none"
         style={{
           top: '-10%', right: '-5%',
           width: '45vw', height: '45vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(99,102,241,0.18) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(200,168,75,0.12) 0%, transparent 70%)',
           animation: 'float-orb 8s ease-in-out infinite',
         }}
       />
@@ -69,7 +69,7 @@ export default function Dashboard() {
           bottom: '5%', left: '-8%',
           width: '40vw', height: '40vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(254,46,40,0.06) 0%, transparent 70%)',
           animation: 'float-orb 10s ease-in-out infinite reverse',
         }}
       />
@@ -79,7 +79,7 @@ export default function Dashboard() {
           top: '30%', left: '35%',
           width: '30vw', height: '30vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(20,184,166,0.08) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(200,168,75,0.07) 0%, transparent 70%)',
           animation: 'float-orb 12s ease-in-out infinite 2s',
         }}
       />

@@ -3,15 +3,15 @@ import { ClockDate } from './ClockDate';
 import Image from 'next/image';
 
 
-/** شعار وزارة التربية والتعليم — SVG مُضمّن */
+/** شعار وزارة التربية والتعليم */
 function MinistryLogo() {
   return (
     <Image
       src="/logo.png"
       alt="شعار وزارة التربية والتعليم"
-      width={50}
-      height={50}
-      className="flex-shrink-0 drop-shadow-lg"
+      width={54}
+      height={54}
+      className="flex-shrink-0 drop-shadow-md"
     />
   );
 }
@@ -22,53 +22,40 @@ export function HeaderBar() {
       className="relative flex-shrink-0 overflow-hidden"
       style={{
         height: '14%',
-        background: 'rgba(15,23,42,0.85)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid rgba(99,102,241,0.25)',
+        background: '#FFFFFF',
+        borderBottom: '3px solid #C8A84B',
+        boxShadow: '0 2px 20px rgba(200,168,75,0.2)',
       }}
-      dir="ltr"
     >
-      {/* Top gradient line */}
+      {/* Top gold shimmer line */}
       <div
         className="absolute top-0 inset-x-0"
         style={{
-          height: '2px',
-          background: 'linear-gradient(90deg, transparent, #6366f1, #8b5cf6, #f59e0b, transparent)',
+          height: '3px',
+          background: 'linear-gradient(90deg, #fe2e28 0%, #C8A84B 40%, #8B6914 60%, #C8A84B 80%, #fe2e28 100%)',
         }}
       />
 
-      {/* Subtle inner glow */}
+      {/* Subtle warm inner glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(99,102,241,0.08) 0%, transparent 100%)',
+          background: 'radial-gradient(ellipse 60% 100% at 50% 0%, rgba(200,168,75,0.05) 0%, transparent 100%)',
         }}
       />
 
       {/* Three-column grid */}
       <div className="h-full grid grid-cols-3 items-center px-6 gap-4 relative z-10">
 
-        {/* Left: Clock */}
-        <div className="flex items-center justify-start">
-          <ClockDate />
-        </div>
-
-        {/* Center: Countdown */}
-        <div className="flex items-center justify-center">
-          <Countdown />
-        </div>
-
-        {/* Right: Ministry title */}
-        <div className="flex items-center justify-end gap-3">
-          <div dir="rtl" className="text-right">
+        {/* Right: Ministry title (Now first child in RTL) */}
+        <div className="flex items-center justify-start gap-3">
+          <MinistryLogo />
+          <div className="text-start">
             <div
               className="font-black leading-tight"
               style={{
                 fontSize: '1.4rem',
-                background: 'linear-gradient(135deg, #ffffff, #e2e8f0)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: '#2D1A00',
               }}
             >
               مكتب وزارة التربية والتعليم
@@ -76,16 +63,22 @@ export function HeaderBar() {
             <div
               className="text-sm font-bold mt-0.5"
               style={{
-                background: 'linear-gradient(90deg, #f59e0b, #fbbf24)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: '#C8A84B',
               }}
             >
-              إدارة التعليم — ساحل حضرموت
+             ساحل حضرموت
             </div>
           </div>
-          <MinistryLogo />
+        </div>
+
+        {/* Center: Countdown */}
+        <div className="flex items-center justify-center">
+          <Countdown />
+        </div>
+
+        {/* Left: Clock (Now third child in RTL) */}
+        <div className="flex items-center justify-end">
+          <ClockDate />
         </div>
 
       </div>
