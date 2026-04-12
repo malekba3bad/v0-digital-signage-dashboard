@@ -102,7 +102,7 @@ export function EventsList({ events }: EventsListProps) {
             <div className="flex-1 text-start min-w-0">
               <div className="flex items-center justify-start gap-1.5 mb-0.5">
                 <DaysBadge days={days} />
-                <h4 className="text-sm font-bold leading-snug truncate" style={{ color: '#2D1A00' }}>{event.titleAr}</h4>
+                <h4 className="text-xl font-bold leading-snug truncate" style={{ color: '#2D1A00' }}>{event.titleAr}</h4>
               </div>
               <div className="flex items-center gap-1 text-[11px] justify-start" style={{ color: '#6B5B3E' }}>
                 <span className="truncate">{event.locationAr}</span>

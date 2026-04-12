@@ -23,7 +23,7 @@ function SectionHeader({
   return (
     <div className="flex items-center justify-start gap-2.5 flex-shrink-0" style={{ marginBottom: '8px' }}>
       <span
-        className="text-sm font-black tracking-wide"
+        className="text-xl font-black tracking-wide"
         style={{ color: '#fe2e28' }}
       >
         {title}

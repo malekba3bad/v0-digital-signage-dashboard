@@ -93,7 +93,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
               <div
                 className="font-black tabular-nums leading-none"
                 style={{
-                  fontSize: '1.4rem',
+                  fontSize: '1.7rem',
                   color: '#2D1A00',
                 }}
               >
@@ -110,7 +110,7 @@ export function StatsCards({ stats }: StatsCardsProps) {
             {/* Footer: Title + Unit */}
             <div className="text-start">
               <div
-                className="text-xs font-bold leading-tight"
+                className="text-lg font-bold leading-tight"
                 style={{ color: '#6B5B3E' }}
               >
                 {stat.titleAr}

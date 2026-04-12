@@ -54,7 +54,7 @@ export function Ticker() {
       <div className="flex-1 overflow-hidden z-10">
         <div
           className="ticker-content font-bold tracking-wider"
-          style={{ fontSize: '1.25rem', color: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
+          style={{ fontSize: '1.6rem', color: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}
         >
           {scrollText}
         </div>
