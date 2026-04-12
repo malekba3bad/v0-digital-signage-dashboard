@@ -92,12 +92,12 @@ export function Countdown() {
   return (
     <div className="flex flex-col items-center gap-2">
       <div
-        className="text-sm font-bold tracking-wide"
+        className="text-xl font-bold tracking-wide"
         style={{ color: '#fe2e28' }}
       >
         {dashboardConfig.countdown.label}
       </div>
-      <div className="flex gap-1.5 items-end">
+      <div className="flex text-xl gap-1.5 items-end">
         <TimeBlock value={time.days} label="أيام" />
         <Separator />
         <TimeBlock value={time.hours} label="ساعات" />
