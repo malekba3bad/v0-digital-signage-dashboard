@@ -61,7 +61,7 @@ export function HeaderBar() {
               مكتب وزارة التربية والتعليم
             </div>
             <div
-              className="text-sm font-bold mt-0.5"
+              className="text-xl font-bold mt-0.5"
               style={{
                 color: '#C8A84B',
               }}
