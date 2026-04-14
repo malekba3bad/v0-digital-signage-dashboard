@@ -9,8 +9,8 @@ function MinistryLogo() {
     <Image
       src="/logo.png"
       alt="شعار وزارة التربية والتعليم"
-      width={54}
-      height={54}
+      width={90}
+      height={90}
       className="flex-shrink-0 drop-shadow-md"
     />
   );
@@ -21,7 +21,7 @@ export function HeaderBar() {
     <header
       className="relative flex-shrink-0 overflow-hidden"
       style={{
-        height: '14%',
+        height: '16%',
         background: '#FFFFFF',
         borderBottom: '3px solid #C8A84B',
         boxShadow: '0 2px 20px rgba(200,168,75,0.2)',

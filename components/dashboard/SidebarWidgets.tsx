@@ -48,7 +48,7 @@ export function SidebarWidgets({ events, stats }: SidebarWidgetsProps) {
       <div
         className="flex flex-col overflow-hidden rounded-2xl"
         style={{
-          flex: '55 1 0',
+          flex: '45 1 0',
           background: '#FFFFFF',
           border: '1px solid rgba(200,168,75,0.3)',
           boxShadow: '0 2px 16px rgba(200,168,75,0.1)',
@@ -69,7 +69,7 @@ export function SidebarWidgets({ events, stats }: SidebarWidgetsProps) {
       <div
         className="flex flex-col overflow-hidden rounded-2xl"
         style={{
-          flex: '45 1 0',
+          flex: '55 1 0',
           background: '#FFFFFF',
           border: '1px solid rgba(200,168,75,0.3)',
           boxShadow: '0 2px 16px rgba(200,168,75,0.1)',

@@ -16,27 +16,27 @@ function getDaysRemaining(dateStr: string): number {
 function DaysBadge({ days }: { days: number }) {
   if (days < 0)
     return (
-      <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+      <span className="text-[13px] px-2 py-0.5 rounded-full font-semibold"
         style={{ background: '#f1f5f9', color: '#64748b', border: '1px solid #cbd5e1' }}>
         انتهت
       </span>
     );
   if (days === 0)
     return (
-      <span className="text-[10px] px-2 py-0.5 rounded-full font-black animate-pulse"
+      <span className="text-[13px] px-2 py-0.5 rounded-full font-black animate-pulse"
         style={{ background: '#dcfce7', color: '#166534', border: '1px solid #86efac' }}>
         اليوم!
       </span>
     );
   if (days <= 7)
     return (
-      <span className="text-[10px] px-2 py-0.5 rounded-full font-bold"
+      <span className="text-[13px] px-2 py-0.5 rounded-full font-bold"
         style={{ background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5' }}>
         {days} أيام
       </span>
     );
   return (
-    <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold"
+    <span className="text-[13px] px-2 py-0.5 rounded-full font-semibold"
       style={{ background: '#fef3c7', color: '#92400e', border: '1px solid #fcd34d' }}>
       {days} يوم
     </span>
@@ -79,24 +79,24 @@ export function EventsList({ events }: EventsListProps) {
             }}
           >
             {/* Date mini-badge */}
-            {!isPast && (
+            {/* {!isPast && (
               <div
                 className="flex-shrink-0 flex flex-col items-center justify-center rounded-lg text-center"
                 style={{
-                  width: '36px',
+                  width: '37px',
                   height: '40px',
                   background: 'linear-gradient(135deg, #FDF8F0, #FFFFFF)',
                   border: '1px solid #C8A84B',
                 }}
               >
-                <div className="text-base font-black space-y-0 text-[#fe2e28] leading-none">
+                <div className="text-[15px] font-black space-y-0 text-[#fe2e28] leading-none">
                   {new Date(event.date + 'T00:00:00').getDate()}
                 </div>
-                <div className="text-[9px] text-[#8B6914] font-bold leading-tight">
+                <div className="text-[15px] text-[#8B6914] font-bold leading-tight">
                   {new Date(event.date + 'T00:00:00').toLocaleDateString('ar', { month: 'short' })}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* Event info */}
             <div className="flex-1 text-start min-w-0">
@@ -104,11 +104,11 @@ export function EventsList({ events }: EventsListProps) {
                 <DaysBadge days={days} />
                 <h4 className="text-xl font-bold leading-snug truncate" style={{ color: '#2D1A00' }}>{event.titleAr}</h4>
               </div>
-              <div className="flex items-center gap-1 text-[11px] justify-start" style={{ color: '#6B5B3E' }}>
+              <div className="flex items-center gap-1 text-[17px] justify-start" style={{ color: '#6B5B3E' }}>
                 <span className="truncate">{event.locationAr}</span>
-                <MapPin className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#C8A84B' }} />
+                <MapPin className="w-5 h-5 flex-shrink-0" style={{ color: '#C8A84B' }} />
                 <span className="flex-shrink-0">{event.dateAr}</span>
-                <Clock className="w-2.5 h-2.5 flex-shrink-0" style={{ color: '#C8A84B' }} />
+                <Clock className="w-5 h-5 flex-shrink-0" style={{ color: '#C8A84B' }} />
               </div>
             </div>
           </div>

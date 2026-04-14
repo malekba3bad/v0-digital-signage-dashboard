@@ -61,11 +61,11 @@ export function ClockDate() {
         {time}
       </div>
       {/* التاريخ الميلادي */}
-      <div className="text-sm font-bold" style={{ color: '#8B6914' }}>{gregorianDate}</div>
+      <div className="text-xl font-bold" style={{ color: '#8B6914' }}>{gregorianDate}</div>
       {/* التاريخ الهجري */}
       {hijriDate && (
         <div
-          className="text-xs font-black"
+          className="text-xl font-black"
           style={{
             color: '#fe2e28',
           }}
