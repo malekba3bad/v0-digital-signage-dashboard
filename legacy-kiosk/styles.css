@@ -1,0 +1,1220 @@
+/*
+ * styles.css — لوحة عرض رقمي — مكتب ساحل حضرموت
+ * ===================================================
+ * الأولوية: توافق Android WebView 83+ / Android TV / متصفحات الكشك
+ *
+ * القواعد الصارمة:
+ *  - لا container queries
+ *  - لا :has()
+ *  - لا CSS nesting
+ *  - لا backdrop-filter (مكلف على الأجهزة القديمة)
+ *  - لا flex gap كآلية تباعد وحيدة (يُستخدم مع margin للدعم الكامل)
+ *  - لا oklch / lab / display-p3 (غير مدعومة في WebView 83)
+ *  - Flexbox + position:absolute بدلاً من grid المعقد
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   1. الخطوط والنص الضروري
+══════════════════════════════════════════════════════════ */
+
+/*
+  Cairo يُحمَّل عبر <link> في HTML باستراتيجية media=print swap.
+  هذا الـ @font-face هو احتياطي فقط — خط النظام يعمل بكفاءة.
+*/
+@font-face {
+  font-family: 'Cairo';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  /* إذا وُضع ملف خط محلي في assets/fonts، استبدل src هنا */
+  src: local('Cairo');
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. متغيرات اللون
+══════════════════════════════════════════════════════════ */
+:root {
+  /* الألوان الأساسية */
+  --color-bg:          #FDF8F0;
+  --color-bg-warm:     #fef3c7;
+  --color-white:       #FFFFFF;
+  --color-dark:        #2D1A00;
+  --color-dark-mid:    #6B5B3E;
+  --color-dark-soft:   #8B6914;
+
+  /* الذهبي والأحمر — الهوية البصرية للوزارة */
+  --color-gold:        #C8A84B;
+  --color-gold-dark:   #8B6914;
+  --color-red:         #fe2e28;
+
+  /* ألوان الإحصائيات */
+  --color-blue:        #1976D2;
+  --color-blue-bg:     #eff6ff;
+  --color-emerald:     #2D6B2D;
+  --color-emerald-bg:  #f0fdf4;
+  --color-purple:      #8B6914;
+  --color-purple-bg:   #fefce8;
+  --color-amber:       #C8A84B;
+  --color-amber-bg:    #fefce8;
+
+  /* ظلال الحدود */
+  --border-gold-light: rgba(200, 168, 75, 0.3);
+  --border-gold-mid:   rgba(200, 168, 75, 0.4);
+  --border-gold-full:  #C8A84B;
+
+  /* الخط */
+  --font-primary: 'Cairo', 'Arial', 'Helvetica Neue', Arial, sans-serif;
+
+  /* نسب الارتفاع */
+  --header-h:  16%;
+  --ticker-h:  7%;
+  --main-h:    calc(100% - var(--header-h) - var(--ticker-h));
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. إعادة الضبط الأساسية
+══════════════════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.4;
+  color: var(--color-dark);
+  background-color: var(--color-bg);
+  /* cursor مخفي في وضع الكشك — يُظهره JS عند الحاجة */
+  cursor: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* تحسين عرض الخط على أجهزة Android */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* إخفاء شريط التمرير لجميع المتصفحات */
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+
+/* إظهار المؤشر على العناصر التفاعلية */
+button, a, [tabindex] {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  border: none;
+}
+
+button {
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. جذر التطبيق
+══════════════════════════════════════════════════════════ */
+#app-root {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-bg);
+  /* تأثير التعتيم الليلي — يُطبَّق بـ JS */
+  -webkit-transition: opacity 2s ease;
+  transition: opacity 2s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. HEADER
+══════════════════════════════════════════════════════════ */
+#header-bar {
+  position: relative;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  height: var(--header-h);
+  background: var(--color-white);
+  border-bottom: 3px solid var(--color-gold);
+  box-shadow: 0 2px 20px rgba(200, 168, 75, 0.2);
+  overflow: hidden;
+}
+
+.header-top-line {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+  background: -webkit-linear-gradient(right, #fe2e28 0%, #C8A84B 40%, #8B6914 60%, #C8A84B 80%, #fe2e28 100%);
+  background: linear-gradient(to left, #fe2e28 0%, #C8A84B 40%, #8B6914 60%, #C8A84B 80%, #fe2e28 100%);
+}
+
+.header-inner-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: -webkit-radial-gradient(50% 0%, ellipse 60% 100%, rgba(200, 168, 75, 0.05) 0%, transparent 100%);
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(200, 168, 75, 0.05) 0%, transparent 100%);
+}
+
+.header-grid {
+  position: relative;
+  z-index: 10;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 24px;
+}
+
+/* في RTL: العلامة التجارية أولاً (يمين)، الوسط ثانياً، الساعة أخيراً (يسار) */
+.header-brand {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 0;
+  flex: 1 0 0;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+}
+
+.header-countdown-wrapper {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 0;
+  flex: 1 0 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.header-clock-wrapper {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 0 0;
+  flex: 1 0 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: start;
+  -webkit-align-items: flex-start;
+  align-items: flex-start;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.header-logo {
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-left: 12px;
+}
+
+.header-title-group {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+
+.header-title-main {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--color-dark);
+  line-height: 1.2;
+}
+
+.header-title-sub {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-gold);
+  margin-top: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. الساعة والتاريخ
+══════════════════════════════════════════════════════════ */
+.clock-time {
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--color-dark);
+  font-variant-numeric: tabular-nums;
+  /* monospace fallback للأرقام */
+  font-family: 'Courier New', 'Cairo', monospace;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 4px rgba(200, 168, 75, 0.3);
+}
+
+.clock-gregorian {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-dark-soft);
+  margin-top: 2px;
+}
+
+.clock-hijri {
+  font-size: 1rem;
+  font-weight: 900;
+  color: var(--color-red);
+  margin-top: 1px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. العد التنازلي
+══════════════════════════════════════════════════════════ */
+#countdown-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.countdown-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-red);
+  margin-bottom: 6px;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.countdown-blocks {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: flex-end;
+  -webkit-align-items: flex-end;
+  align-items: flex-end;
+}
+
+.countdown-block {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  margin: 0 4px;
+}
+
+.countdown-value-box {
+  min-width: 3.5rem;
+  text-align: center;
+  background: var(--color-white);
+  border: 1px solid var(--border-gold-mid);
+  box-shadow: 0 2px 10px rgba(200, 168, 75, 0.1);
+  border-radius: 10px;
+  padding: 5px 8px;
+}
+
+.countdown-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--color-dark);
+  font-variant-numeric: tabular-nums;
+  font-family: 'Courier New', 'Cairo', monospace;
+  line-height: 1;
+}
+
+.countdown-unit {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-dark-soft);
+  margin-top: 3px;
+  letter-spacing: 0.03em;
+}
+
+.countdown-separator {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--color-gold);
+  margin: 0 1px 14px 1px;
+  -webkit-animation: blink-sep 1.2s ease-in-out infinite;
+  animation: blink-sep 1.2s ease-in-out infinite;
+  line-height: 1;
+}
+
+.countdown-completed {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2D6B2D;
+  text-align: center;
+  -webkit-animation: gentle-pulse 1.5s ease-in-out infinite;
+  animation: gentle-pulse 1.5s ease-in-out infinite;
+}
+
+@-webkit-keyframes blink-sep {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+@keyframes blink-sep {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@-webkit-keyframes gentle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+@keyframes gentle-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   8. زر ملء الشاشة
+══════════════════════════════════════════════════════════ */
+.fullscreen-btn {
+  position: absolute;
+  top: 48px;
+  left: 12px;
+  z-index: 500;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border-gold-mid);
+  color: var(--color-dark-soft);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(200, 168, 75, 0.15);
+  cursor: pointer;
+  /* forgiving focus ring for keyboard/remote navigation */
+  outline-offset: 2px;
+}
+
+.fullscreen-btn:focus {
+  outline: 2px solid var(--color-gold);
+}
+
+.fs-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.fs-icon-hidden {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   9. محتوى الصفحة الرئيسية
+══════════════════════════════════════════════════════════ */
+#main-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+  flex: 1 1 0;
+  overflow: hidden;
+  padding: 12px 16px;
+  min-height: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10. شريحة الأخبار
+══════════════════════════════════════════════════════════ */
+#news-slider-section {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 0;
+  flex: 1 1 0;
+  min-width: 0;
+  margin-left: 12px;  /* في RTL هذه المسافة تكون على اليسار (بين المحتوى والشريط الجانبي) */
+}
+
+.news-slider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--color-white);
+  border: 1px solid var(--border-gold-mid);
+  box-shadow: 0 4px 24px rgba(200, 168, 75, 0.15);
+}
+
+/* شريط التقدم */
+.slider-progress-bar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  z-index: 30;
+}
+
+.slider-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-gold);
+  box-shadow: 0 0 8px rgba(200, 168, 75, 0.7);
+  -webkit-transition: width 0.1s linear;
+  transition: width 0.1s linear;
+}
+
+/* منطقة العرض */
+.slider-content {
+  position: absolute;
+  inset: 0;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
+}
+
+.slider-content.fading {
+  opacity: 0;
+}
+
+/* صورة داخل الشريحة */
+.slide-image {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* طبقة تدرج فوق الصورة */
+.slide-gradient {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  background: -webkit-linear-gradient(top, transparent 30%, rgba(0,0,0,0.85) 100%);
+  background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.85) 100%);
+}
+
+/* عنوان الشريحة */
+.slide-title {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 24px 32px;
+  z-index: 10;
+}
+
+.slide-title h2 {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  text-align: right;
+  line-height: 1.35;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  margin: 0;
+}
+
+/* حاوية فيديو يوتيوب */
+.slide-video-container {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+.slide-video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* عنوان الفيديو */
+.slide-video-title {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  padding: 24px 32px 6px;
+  background: -webkit-linear-gradient(top, transparent, rgba(0,0,0,0.8));
+  background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.8));
+  z-index: 10;
+}
+
+.slide-video-title h2 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  text-align: right;
+  line-height: 1.4;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+  margin: 0;
+}
+
+/* حالة fallback بدلاً من الفيديو (صورة) */
+.slide-video-fallback {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  background: #1a1a2e;
+}
+
+.slide-video-fallback img {
+  max-width: 40%;
+  max-height: 40%;
+  object-fit: contain;
+  opacity: 0.6;
+}
+
+/* حالة التحميل الأولية */
+.slider-loading-state {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  background: var(--color-bg);
+}
+
+.slider-loading-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.5;
+}
+
+/* أيقونة التحميل فوق الفيديو */
+.video-overlay-loading {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 20;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.video-play-icon {
+  width: 56px;
+  height: 56px;
+  color: rgba(255, 255, 255, 0.85);
+  -webkit-animation: gentle-pulse 1.5s ease-in-out infinite;
+  animation: gentle-pulse 1.5s ease-in-out infinite;
+}
+
+/* شارة نوع المحتوى */
+.slider-badge-area {
+  position: absolute;
+  top: 16px;
+  /* في RTL: start = right */
+  right: 16px;
+  z-index: 30;
+}
+
+.content-badge {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.badge-youtube { color: #f87171; }
+.badge-image   { color: #6ee7b7; }
+.badge-lesson  { color: #a5b4fc; }
+
+.badge-icon {
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+/* شارة عاجل */
+.urgent-badge {
+  position: absolute;
+  top: 16px;
+  /* في RTL: end = left */
+  left: 16px;
+  z-index: 30;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  background: #dc2626;
+  color: #FFFFFF;
+  padding: 6px 16px;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(220, 38, 38, 0.4);
+}
+
+.urgent-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  margin-left: 8px;
+  -webkit-animation: urgent-ping 1.2s ease-in-out infinite;
+  animation: urgent-ping 1.2s ease-in-out infinite;
+}
+
+.urgent-text {
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+}
+
+@-webkit-keyframes urgent-ping {
+  0%, 100% { opacity: 1; -webkit-transform: scale(1); transform: scale(1); }
+  50% { opacity: 0.5; -webkit-transform: scale(1.4); transform: scale(1.4); }
+}
+@keyframes urgent-ping {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11. الشريط الجانبي
+══════════════════════════════════════════════════════════ */
+#sidebar {
+  width: 36%;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.sidebar-card {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  background: var(--color-white);
+  border: 1px solid var(--border-gold-light);
+  box-shadow: 0 2px 16px rgba(200, 168, 75, 0.1);
+  border-radius: 16px;
+  padding: 12px;
+  overflow: hidden;
+}
+
+/* الفعاليات: 45% من الارتفاع */
+#events-section {
+  -webkit-box-flex: 45;
+  -webkit-flex: 45 1 0;
+  flex: 45 1 0;
+  margin-bottom: 10px;
+}
+
+/* الإحصائيات: 55% من الارتفاع */
+#stats-section {
+  -webkit-box-flex: 55;
+  -webkit-flex: 55 1 0;
+  flex: 55 1 0;
+}
+
+/* رأس القسم */
+.sidebar-section-header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 8px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-section-title {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--color-red);
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.sidebar-section-icon {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  margin-right: 8px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.sidebar-section-icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: #fff;
+}
+
+.sidebar-icon-gold { background: var(--color-gold); }
+.sidebar-icon-red  { background: var(--color-red); }
+
+/* ═══════════════════════════════════════════════════════════
+   12. قائمة الفعاليات
+══════════════════════════════════════════════════════════ */
+.events-list {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.event-card {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 6px;
+}
+
+.event-card-upcoming {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-gold-mid);
+  box-shadow: 0 2px 8px rgba(200, 168, 75, 0.08);
+}
+
+.event-card-past {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(200, 168, 75, 0.2);
+  opacity: 0.6;
+}
+
+.event-info {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+
+.event-header-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  justify-content: flex-start;
+  margin-bottom: 3px;
+}
+
+.event-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-right: 6px;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+
+.event-meta {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  font-size: 0.95rem;
+  color: var(--color-dark-mid);
+}
+
+.event-meta-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-gold);
+  margin: 0 3px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+/* شارات الأيام المتبقية */
+.days-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  white-space: nowrap;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.badge-past     { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+.badge-today    { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.badge-soon     { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+.badge-upcoming { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+
+/* ═══════════════════════════════════════════════════════════
+   13. شبكة الإحصائيات
+══════════════════════════════════════════════════════════ */
+.stats-grid {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  overflow: hidden;
+  /* تعويض margin لعناصر الشبكة */
+  margin: -4px;
+}
+
+.stat-card {
+  /* 50% عرض مع خصم الهامش */
+  width: calc(50% - 8px);
+  margin: 4px;
+  border-radius: 12px;
+  background: var(--color-white);
+  border: 1px solid var(--border-gold-mid);
+  box-shadow: 0 2px 10px rgba(200, 168, 75, 0.08);
+  padding: 10px 12px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  min-height: 80px;
+}
+
+.stat-header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--color-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.stat-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.stat-icon-box svg {
+  width: 16px;
+  height: 16px;
+}
+
+.stat-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-dark-mid);
+  text-align: right;
+  line-height: 1.3;
+}
+
+.stat-unit {
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 2px;
+  opacity: 0.9;
+  text-align: right;
+}
+
+/* ألوان أيقونات الإحصائيات */
+.stat-color-blue    { color: var(--color-blue); }
+.stat-color-emerald { color: var(--color-emerald); }
+.stat-color-purple  { color: var(--color-purple); }
+.stat-color-amber   { color: var(--color-amber); }
+
+.stat-bg-blue    { background: var(--color-blue-bg); }
+.stat-bg-emerald { background: var(--color-emerald-bg); }
+.stat-bg-purple  { background: var(--color-purple-bg); }
+.stat-bg-amber   { background: var(--color-amber-bg); }
+
+/* ═══════════════════════════════════════════════════════════
+   14. شريط الأخبار السفلي (Ticker)
+══════════════════════════════════════════════════════════ */
+#ticker-bar {
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  height: var(--ticker-h);
+  background: #8B6914;
+  border-top: 2px solid var(--color-gold);
+  overflow: hidden;
+}
+
+.ticker-label {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 18px;
+  background: var(--color-red);
+  border-left: 2px solid var(--color-gold);
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  position: relative;
+}
+
+.ticker-icon {
+  width: 22px;
+  height: 22px;
+  color: #FFFFFF;
+  margin-left: 8px;
+  -webkit-flex-shrink: 0;
+  flex-shrink: 0;
+}
+
+.ticker-label-text {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.ticker-track {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+.ticker-content {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.03em;
+  /* الحركة من اليمين إلى اليسار (RTL display) */
+  -webkit-animation: ticker-scroll 70s linear infinite;
+  animation: ticker-scroll 70s linear infinite;
+}
+
+@-webkit-keyframes ticker-scroll {
+  0%   { -webkit-transform: translateX(-100vw); transform: translateX(-100vw); }
+  100% { -webkit-transform: translateX(100%); transform: translateX(100%); }
+}
+@keyframes ticker-scroll {
+  0%   { transform: translateX(-100vw); }
+  100% { transform: translateX(100%); }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   15. حالة تعتيم الليل
+══════════════════════════════════════════════════════════ */
+#app-root.night-dimmed {
+  opacity: 0.55;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   16. قابلية الوصول وتنقل لوحة المفاتيح / التحكم عن بعد
+══════════════════════════════════════════════════════════ */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+/* إخفاء محتوى المساعدة البصرية */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

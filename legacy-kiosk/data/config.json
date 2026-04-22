@@ -1,0 +1,27 @@
+{
+  "_comment": "ملف إعدادات لوحة العرض الرقمية — عدّل القيم ثم ادفع للنشر",
+
+  "countdown": {
+    "date": "2026-06-15",
+    "label": "متبقي على اختبارات نهاية العام",
+    "completedLabel": "🎓 انطلقت الاختبارات!"
+  },
+
+  "imageSlideDurationMs": 30000,
+  "clockUpdateIntervalMs": 1000,
+
+  "youtube": {
+    "startFallbackMs": 30000,
+    "videoErrorFallbackMs": 180000,
+    "maxAbsoluteFallbackMs": 7200000
+  },
+
+  "fullscreenEnabled": true,
+
+  "nightDimming": {
+    "enabled": true,
+    "startHour": 21,
+    "endHour": 6,
+    "opacity": 0.55
+  }
+}

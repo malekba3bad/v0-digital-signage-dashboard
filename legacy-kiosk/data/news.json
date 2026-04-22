@@ -1,0 +1,66 @@
+[
+  {
+    "_comment": "نوع 'lesson' = فيديو يوتيوب تعليمي مع شارة خاصة",
+    "id": "lesson-1",
+    "type": "lesson",
+    "enabled": true,
+    "titleAr": "دروس تعليمية | الفيزياء | سرعة الأفلات | الصف الثالث ثانوي",
+    "text": "دروس تعليمية | الفيزياء | سرعة الأفلات | الصف الثالث ثانوي",
+    "youtubeVideoId": "V244fZwcjrY",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "isUrgent": false,
+    "order": 1
+  },
+  {
+    "id": "news-2",
+    "type": "youtube",
+    "enabled": true,
+    "titleAr": "اجتماع اللجنة الإشرافية الفرعية للاختبارات بساحل حضرموت",
+    "youtubeVideoId": "pUu5sb73igA",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "isUrgent": false,
+    "order": 2
+  },
+  {
+    "id": "news-3",
+    "type": "image",
+    "enabled": true,
+    "titleAr": "مكتب تربية ساحل حضرموت يناقش مشروع تطوير قدرات الموجهين التربويين المقدم من مؤسسة حضرموت تنمية بشرية",
+    "imageSrc": "https://meoh.gov.ye/wp-content/uploads/2026/03/IMG-20260330-WA0039.jpg",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "durationMs": 30000,
+    "isUrgent": false,
+    "order": 3
+  },
+  {
+    "id": "news-4",
+    "type": "youtube",
+    "enabled": true,
+    "titleAr": "مدير تربية ساحل حضرموت يطلع على سير الدراسة في عدد من مدارس وثانويات منطقة ربوة خلف بمديرية المكلا",
+    "youtubeVideoId": "9KMic2hIz9c",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "isUrgent": false,
+    "order": 4
+  },
+  {
+    "id": "news-5",
+    "type": "youtube",
+    "enabled": true,
+    "titleAr": "مدير تربية ساحل حضرموت يتفقد أضرار المنخفض الجوي بمدرسة ابن الهيثم بمنطقة ربوة خلف بمديرية المكلا",
+    "youtubeVideoId": "9KMic2hIz9c",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "isUrgent": true,
+    "order": 5
+  },
+  {
+    "id": "lesson-2",
+    "type": "lesson",
+    "enabled": true,
+    "titleAr": "درس في مادة الرياضيات للصف الأول الثانوي",
+    "text": "مادة الرياضيات للصف الأول الثانوي",
+    "youtubeVideoId": "9KMic2hIz9c",
+    "fallbackImageSrc": "assets/images/logo.png",
+    "isUrgent": false,
+    "order": 6
+  }
+]

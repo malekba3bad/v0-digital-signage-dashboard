@@ -1,0 +1,34 @@
+[
+  {
+    "id": "stat-1",
+    "titleAr": "إجمالي الطلاب",
+    "value": 52400,
+    "unit": "طالب وطالبة",
+    "icon": "users",
+    "color": "blue"
+  },
+  {
+    "id": "stat-2",
+    "titleAr": "الكادر التربوي",
+    "value": 3420,
+    "unit": "معلم ومعلمة",
+    "icon": "graduation",
+    "color": "emerald"
+  },
+  {
+    "id": "stat-3",
+    "titleAr": "المدارس",
+    "value": 187,
+    "unit": "مدرسة",
+    "icon": "school",
+    "color": "purple"
+  },
+  {
+    "id": "stat-4",
+    "titleAr": "المشاريع المنجزة",
+    "value": 47,
+    "unit": "مشروع",
+    "icon": "check",
+    "color": "amber"
+  }
+]
