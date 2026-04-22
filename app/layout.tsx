@@ -16,11 +16,11 @@ export const metadata: Metadata = {
   description: 'لوحة عرض رقمية لإدارة التعليم بساحل حضرموت — تعرض الأخبار والفعاليات والإحصائيات',
   icons: {
     icon: [
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png',  media: '(prefers-color-scheme: dark)' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/logo.png', media: '(prefers-color-scheme: light)' },
+      { url: '/logo.png',  media: '(prefers-color-scheme: dark)' },
+      { url: '/logo.png', type: 'image/png' },
     ],
-    apple: '/apple-icon.png',
+    apple: '/logo.png',
   },
 }
 

@@ -36,8 +36,11 @@ declare global {
 // ─── ثوابت ───────────────────────────────────────────────────────────────────
 const YT_STATE = { ENDED: 0, PLAYING: 1, PAUSED: 2, BUFFERING: 3 } as const;
 
-/** مدة الـ fallback: 3 دقائق — إذا لم تشتغل أي طريقة ينتقل بعد 3 دقائق */
-const FALLBACK_MS = 3 * 60 * 1000;
+/** مدة الـ fallback الأولية للانتظار حتى يبدأ الفيديو: 30 ثانية */
+const START_FALLBACK_MS = 30 * 1000;
+
+/** الحد الأقصى المطلق كإجراء احتياطي للطوارئ (ساعتان) للمقاطع الطويلة جداً */
+const MAX_FALLBACK_MS = 2 * 60 * 60 * 1000;
 
 /** مدة عرض الصورة الثابتة */
 const IMAGE_MS = dashboardConfig.imageSlideDurationMs ?? 30_000;
@@ -152,7 +155,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
           videoId,
           playerVars: {
             autoplay:       1,
-            mute:           1,
+            mute:           0,
             controls:       0,
             playsinline:    1,
             rel:            0,
@@ -160,7 +163,14 @@ export function NewsSlider({ items }: NewsSliderProps) {
           },
           events: {
             onStateChange: (e) => {
-              if (e.data === YT_STATE.PLAYING)  setIsVideoPlaying(true);
+              if (e.data === YT_STATE.PLAYING) {
+                setIsVideoPlaying(true);
+                // إيقاف مؤقت التخطي الجبري الفوري بمجرد بدء عمل الفيديو فعلياً وتعيين مؤقت طويل للطوارئ
+                if (timeoutRef.current) {
+                  clearTimeout(timeoutRef.current);
+                  timeoutRef.current = setTimeout(goToNextRef.current, MAX_FALLBACK_MS);
+                }
+              }
               if (e.data === YT_STATE.PAUSED)   setIsVideoPlaying(false);
               if (e.data === YT_STATE.BUFFERING) setIsVideoPlaying(false);
 
@@ -229,8 +239,8 @@ export function NewsSlider({ items }: NewsSliderProps) {
      * └─────────────────────────────────────────────────────────────┘
      */
 
-    // 3️⃣ الطريقة الثالثة: Fallback timer — 3 دقائق كحدّ أقصى مطلق
-    timeoutRef.current = setTimeout(goToNext, FALLBACK_MS);
+    // 3️⃣ الطريقة الثالثة: Fallback timer — نعطيه 30 ثانية كحد أقصى ليبدأ فعلياً وإلا نتجاوزه
+    timeoutRef.current = setTimeout(goToNext, START_FALLBACK_MS);
 
     // 2️⃣ الطريقة الثانية: postMessage (يدعم كلا صيغتي يوتيوب القديمة والجديدة)
     const handleMessage = (event: MessageEvent) => {
@@ -244,14 +254,26 @@ export function NewsSlider({ items }: NewsSliderProps) {
         // الصيغة الجديدة: infoDelivery
         if (data.event === 'infoDelivery' && typeof data.info === 'object' && data.info !== null) {
           const info = data.info as { playerState?: number };
-          if (info.playerState === YT_STATE.PLAYING)  setIsVideoPlaying(true);
+          if (info.playerState === YT_STATE.PLAYING) {
+            setIsVideoPlaying(true);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = setTimeout(goToNext, MAX_FALLBACK_MS);
+            }
+          }
           if (info.playerState === YT_STATE.PAUSED)   setIsVideoPlaying(false);
           if (info.playerState === YT_STATE.ENDED)    goToNext();
         }
 
         // الصيغة القديمة: onStateChange
         if (data.event === 'onStateChange' && typeof data.info === 'number') {
-          if (data.info === YT_STATE.PLAYING) setIsVideoPlaying(true);
+          if (data.info === YT_STATE.PLAYING) {
+            setIsVideoPlaying(true);
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = setTimeout(goToNext, MAX_FALLBACK_MS);
+            }
+          }
           if (data.info === YT_STATE.PAUSED)  setIsVideoPlaying(false);
           if (data.info === YT_STATE.ENDED)   goToNext();
         }
@@ -324,8 +346,8 @@ export function NewsSlider({ items }: NewsSliderProps) {
         )}
 
         {/* عنوان الفيديو */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/85 to-transparent p-8 z-10">
-          <h2 className="text-4xl leading-11 font-black text-white text-start drop-shadow-xl">
+        <div className="absolute bottom-[-18px] inset-x-0 bg-gradient-to-t from-black/85 to-transparent p-8 z-10">
+          <h2 className="text-2xl leading-11 font-black text-white text-start drop-shadow-xl">
             {currentItem.titleAr}
           </h2>
         </div>
@@ -356,7 +378,7 @@ export function NewsSlider({ items }: NewsSliderProps) {
       )}
 
       {/* نقاط مؤشر الشرائح */}
-      <div className="absolute bottom-5 end-6 flex gap-2 z-20">
+      {/* <div className="absolute bottom-5 end-6 flex gap-2 z-20">
         {items.map((_, index) => (
           <div
             key={index}
@@ -367,12 +389,12 @@ export function NewsSlider({ items }: NewsSliderProps) {
             }`}
           />
         ))}
-      </div>
+      </div> */}
 
       {/* عداد الشرائح */}
-      <div className="absolute bottom-5 start-6 z-20 text-white/60 text-sm font-mono">
+      {/* <div className="absolute bottom-5 start-6 z-20 text-white/60 text-sm font-mono">
         {currentIndex + 1} / {items.length}
-      </div>
+      </div> */}
 
       {/* شارة نوع المحتوى */}
       <div className="absolute top-4 start-4 z-30">
@@ -381,16 +403,23 @@ export function NewsSlider({ items }: NewsSliderProps) {
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21.582 6.186a2.496 2.496 0 0 0-1.756-1.756C18.254 4 12 4 12 4s-6.254 0-7.826.43a2.496 2.496 0 0 0-1.756 1.756C2 7.757 2 12 2 12s0 4.243.418 5.814a2.496 2.496 0 0 0 1.756 1.756C5.746 20 12 20 12 20s6.254 0 7.826-.43a2.496 2.496 0 0 0 1.756-1.756C22 16.243 22 12 22 12s0-4.243-.418-5.814zM10 15.464V8.536L16 12l-6 3.464z" />
             </svg>
-            يوتيوب
+            اخبار المكتب
           </div>
-        ) : (
+        ) : currentItem.type === 'image' ? (
           <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-emerald-400 px-3 py-1.5 rounded-lg text-sm font-bold border border-emerald-500/30">
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
             </svg>
             صورة
           </div>
-        )}
+        ) : currentItem.type === 'lesson' ? (
+          <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-sm text-indigo-400 px-3 py-1.5 rounded-lg text-sm font-bold border border-indigo-500/30">
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z" />
+            </svg>
+            دروس تعليمية
+          </div>
+        ) : null}
       </div>
 
       {/* شارة عاجل */}

@@ -14,14 +14,24 @@ export type NewsItem =
     youtubeVideoId: string;
     imageSrc?: never;
     isUrgent?: boolean;
-  };
+  }
+  | {
+    type: 'lesson';
+    id: string;
+    titleAr: string;
+    text: string;
+    youtubeVideoId: string;
+    imageSrc?: never;
+    isUrgent?: boolean;
+  }
 
 export const newsItems: NewsItem[] = [
   {
-    type: 'youtube',
-    id: 'news-1',
-    titleAr: 'اجتماع تربية ساحل حضرموت مع برنامج الغذاء العالمي',
-    youtubeVideoId: '4GHGwcAnVTc',
+    type: 'lesson',
+    id: 'lesson-1',
+    titleAr: 'دروس تعليمية | الفيزياء | سرعة الأفلات | الصف الثالث ثانوي',
+    text: 'دروس تعليمية | الفيزياء | سرعة الأفلات | الصف الثالث ثانوي',
+    youtubeVideoId: 'V244fZwcjrY',
     isUrgent: false,
   },
   {
@@ -51,5 +61,13 @@ export const newsItems: NewsItem[] = [
     titleAr: 'مدير تربية ساحل حضرموت يتفقد أضرار المنخفض الجوي بمدرسة ابن الهيثم بمنطقة ربوة خلف بمديرية المكلا',
     youtubeVideoId: '9KMic2hIz9c',
     isUrgent: true,
+  },
+  {
+    type: 'lesson',
+    id: 'lesson-1',
+    titleAr: 'درس في مادة الرياضيات للصف الأول الثانوي',
+    text: 'مادة الرياضيات للصف الأول الثانوي',
+    youtubeVideoId: '9KMic2hIz9c',
+    isUrgent: false,
   },
 ];
