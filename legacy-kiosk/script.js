@@ -766,19 +766,15 @@ function renderVideoSlide(item) {
   var loadingOverlay = document.getElementById('video-overlay-loading');
   if (loadingOverlay) loadingOverlay.style.display = 'flex';
 
-  // بناء الـ iframe
+  // ✅ الإصلاح: إنشاء div فارغ كهدف — YT.Player يحقن iframe الخاص به (مثل NewsSlider.tsx)
+  // لا نُنشئ iframe يدوياً لأنه يُسبب race condition مع YT.Player
   var videoWrapper = document.createElement('div');
   videoWrapper.className = 'slide-video-container';
 
-  var iframe = document.createElement('iframe');
-  // بناء URL يوتيوب آمن بدون أي خاصية معقدة
-  iframe.src = 'https://www.youtube.com/embed/' + encodeURIComponent(videoId) +
-               '?autoplay=1&mute=0&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1';
-  iframe.setAttribute('allowfullscreen', '');
-  iframe.setAttribute('allow', 'autoplay');
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('title', item.titleAr || 'فيديو');
-  // لا يُعطى id لأن YT.Player سيُدير المشغل
+  var playerTarget = document.createElement('div');
+  playerTarget.style.width = '100%';
+  playerTarget.style.height = '100%';
+  videoWrapper.appendChild(playerTarget);
 
   // عنوان الفيديو
   var titleBar = document.createElement('div');
@@ -789,7 +785,6 @@ function renderVideoSlide(item) {
 
   container.innerHTML = '';
   container.appendChild(videoWrapper);
-  videoWrapper.appendChild(iframe);
   container.appendChild(titleBar);
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -839,22 +834,28 @@ function renderVideoSlide(item) {
   sliderState._ytMessageHandler = onYTMessage;
 
   // الطريقة 1: YT.Player API
+  // ✅ الإصلاح: تمرير playerTarget (div فارغ) كهدف — YT.Player يُنشئ iframe بنفسه
   loadYouTubeAPI(function() {
     // تأكد أن الشريحة ما زالت نفسها
     if (sliderState.isTransitioning) return;
     if (!window.YT || !window.YT.Player) return;
+    // تأكد أن الـ div الهدف ما زال في الـ DOM
+    if (!playerTarget.parentNode) return;
 
     try {
       destroyYTPlayer();
-      ytState.player = new window.YT.Player(iframe, {
+      ytState.player = new window.YT.Player(playerTarget, {
         videoId: videoId,
+        width: '100%',
+        height: '100%',
         playerVars: {
           autoplay: 1,
           mute: 0,
           controls: 0,
           playsinline: 1,
           rel: 0,
-          modestbranding: 1
+          modestbranding: 1,
+          enablejsapi: 1
         },
         events: {
           onStateChange: function(e) {
@@ -1062,10 +1063,3 @@ function cleanupVideoMessageHandler() {
     sliderState._ytMessageHandler = null;
   }
 }
-
-// تجاوز goToNextSlide الأصلي لتنظيف المستمع
-var _originalGoToNext = goToNextSlide;
-goToNextSlide = function() {
-  cleanupVideoMessageHandler();
-  _originalGoToNext();
-};
